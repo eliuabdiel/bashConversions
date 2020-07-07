@@ -1,5 +1,6 @@
 #!/bin/bash
 ToDecimal(){
+	process $1
 	numero=0
 	parametros=`expr "$1" : '.*'`
         for ((i=0; i <= parametros; i++))
@@ -21,19 +22,20 @@ ToDecimal(){
                         let exceso=$i-1
                         let exponente=$2**$exceso
                         let contador=valor*$exponente
-                        echo $valor "x "$2 " ^^"$exceso "=" $valor " x "$exponente "="$contador
+                        echo $valor "x "$2" ^^ "$exceso" = "$valor" x "$exponente" = "$contador
                         let numero+=contador
 			echo "Sumatoria = "$numero
                 fi
         done
+	endProcess
 }
 DecimalTo(){
+	process $1
 	modulo=""
-	echo "Este es el valor de modulo: "$modulo
-        numero=$1
-	echo "Este es el valor del numero: "$numero
+    	numero=$1
         while [ $numero != 0 ]; do
                 let mod=numero%$2
+		numeroprueba=numero
                 let numero=numero/$2
                 case $mod in
        	        10) mod="A";;
@@ -44,11 +46,31 @@ DecimalTo(){
                 15) mod="F";;
 		*);;
                 esac
+		echo $numeroprueba" / "$2" = "$numero "| residuo = "$mod
                 modulo="${mod}$modulo"
+		echo "Sumatoria = "$modulo
         done
+	endProcess
+}
+pause(){
+	echo "Presione enter para continuar..."
+	read pause
+}
+process(){
+	echo "Convirtiendo el numero: "$1
+        echo "================================================"
+        echo "Proceso"
+        echo "================================================"
+}
+endProcess(){
+	echo "================================================"
+        echo "Fin proceso"
+        echo "================================================"
+
 }
 decision=0
 while [ $decision != 9 ]; do
+	clear
 	echo "1.- Convertir de Binario a Decimal"
 	echo "2.- Convertir de Octal a Decimal"
 	echo "3.- Convertir de Hexadecimal a Decimal"
@@ -62,38 +84,54 @@ while [ $decision != 9 ]; do
 	case $decision in
 	1) echo "Captura el numero Binario"
 		read number
+		clear
 		ToDecimal $number 2
-		echo "EL numero en Decimal es: "$numero;;
+		echo "EL numero en Decimal es: "$numero
+		pause;;
 	2) echo "Captura el numero Octal"
 		read number
+		clear
 		ToDecimal $number 8
-		echo "El numero en Decimal es: "$numero;;
+		echo "El numero en Decimal es: "$numero
+		pause;;
 	3) echo "Captura el numero Hexadecimal"
 		read number
+		clear
 		ToDecimal $number 16
-		echo "EL numero en Decimal es: "$numero;;
+		echo "EL numero en Decimal es: "$numero
+		pause;;
 	4) echo "Captura el numero Decimal"
 		read number
+		clear
 		DecimalTo $number 2
-		echo "El numero Binario es: "$modulo;;
+		echo "El numero Binario es: "$modulo
+		pause;;
 	5) echo "Captura el numero Decimal"
 		read number
+		clear
 		DecimalTo $number 8
-		echo "El numero Octal es: "$modulo;;
+		echo "El numero Octal es: "$modulo
+		pause;;
 	6) echo "Captura el numero Decimal"
 		read number
+		clear
 		DecimalTo $number 16
-		echo "El numero Hexadecimal es: "$modulo;;
+		echo "El numero Hexadecimal es: "$modulo
+		pause;;
 	7) echo "Captura el numero Binario"
 		read number
+		clear
 		ToDecimal $number 2
 		DecimalTo $numero 16
-		echo "El numero en Hexadecimal es: "$modulo;;
+		echo "El numero en Hexadecimal es: "$modulo
+		pause;;
 	8) echo "Captura el numero Hexadecimal"
 		read number
+		clear
 		ToDecimal $number 16
 		DecimalTo $numero 2
-		echo "El numero Binario es: "$modulo;;
+		echo "El numero Binario es: "$modulo
+		pause;;
 	9) break;;
 	*) echo "Favor de seleccionar las opciones el menu";;
 	esac
